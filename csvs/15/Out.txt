@@ -1,0 +1,8 @@
+Valor NaN encontrado en el archivo csvs/15/XData.csv linea 1855
+Valor NaN encontrado en el archivo csvs/15/XData.csv linea 1856
+
+Construyendo un SVR..!
+
+w: {-nan,-nan}
+b: -nan
+

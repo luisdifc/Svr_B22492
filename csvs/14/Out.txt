@@ -1,0 +1,6 @@
+
+Construyendo un SVR..!
+
+w: {-nan,-nan}
+b: -nan
+
