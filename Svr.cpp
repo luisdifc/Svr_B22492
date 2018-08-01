@@ -207,7 +207,6 @@ int Svr::TakeStep(int i1, int i2, float a2, float y2, float E2, vector<float> x2
 		}
 	}
 
-	//If alpha2 did not change enough the algorithm returns without updating the multipliers
 	//Si a2 no cambia lo suficiente el algoritmo retorna sin actulizar los multiplicadores
 	if (abs(a2New - a2) < (this->eps * (a2New + a2 + this->eps))) 
 	{
