@@ -23,6 +23,25 @@ Controlador::~Controlador() {
 }
 
 
+void Controlador::vectorModule (vector<float> vector) 
+{
+	float module = 0;
+
+	for (int index = 0; index < vector.size(); index++) 
+	{
+		module += vector[index] * vector[index];
+		module = module;
+	}
+
+	module = sqrt(module);
+
+	for (int index = 0; index < vector.size(); index++) {
+		cout << vector[index] / module << "\n";
+	}
+	cout << "separador" <<endl;
+}
+
+
 /*! \brief Metodo que instancia un lector de archivos y una SVR para hacer el entrenamiento y la prediccion.
 */
 int Controlador::run(int argc, char** argv) {
@@ -43,14 +62,20 @@ int Controlador::run(int argc, char** argv) {
 
 	// cout << path << endl;
 
-    filestr.open ( path+"/Out1.txt" );
+    filestr.open ( path+"/Out_Regressions.txt" );
     backup = std::cout.rdbuf();
     psbuf = filestr.rdbuf();
     std::cout.rdbuf(psbuf);
 
-	vector<vector<double>> XData = reader.parse2DCsvFile(path+"/XData.csv");
-	vector<vector<double>> XDataR = reader.parse2DCsvFile(path+"/XDataR.csv");
-	vector<double> YData = reader.parse1DCsvFile(path+"/YData.csv");
+	vector<vector<float>> XData = reader.parse2DCsvFile(path+"/XData.csv");
+	vector<vector<float>> XDataR = reader.parse2DCsvFile(path+"/XDataR.csv");
+	vector<float> YData = reader.parse1DCsvFile(path+"/YData.csv");
+
+	// vector<float> X1 = reader.parse1DCsvFile(path+"/X1.csv");
+	// vector<float> X2 = reader.parse1DCsvFile(path+"/X2.csv");
+	// vectorModule(X1);
+	// vectorModule(X2);
+	// vectorModule(YData);
 
 	Svr* maquina1 = new Svr(10, 0.01, 1, 1, XData, YData);
 	maquina1->MainRoutine();
@@ -60,14 +85,22 @@ int Controlador::run(int argc, char** argv) {
 	cout << "b: " << maquina1->b << endl;
 	cout << endl;
 
+	cout << "Alphas: " << endl;
+	maquina1->PrintVector(maquina1->alphas);
+
+	cout << "\nRegressions:" << endl;
+	maquina1->Vector2Csv(maquina1->PredictRegression(XDataR));
+	
+
     std::cout.rdbuf(backup);
     filestr.close();
-    delete maquina1;
+    //delete maquina1;
 
 	cout << "SVR finished running" << endl;
 
     return 0;
 }
+
 
 
 
@@ -78,17 +111,17 @@ int Controlador::run(int argc, char** argv) {
 	//--------------------------------------------------------------------------------
 	//--------------------------------------------------------------------------------	
 
-/*	// vector<vector<double>> XData = reader.parse2DCsvFile("Data/flowers/XData.csv");
-	// vector<double> YData = reader.parse1DCsvFile("Data/flowers/YData.csv");
+/*	// vector<vector<float>> XData = reader.parse2DCsvFile("Data/flowers/XData.csv");
+	// vector<float> YData = reader.parse1DCsvFile("Data/flowers/YData.csv");
 
-	vector<vector<double>> XData = reader.parse2DCsvFile("Data/pdfDataset/XDataPdf.csv");
-	vector<double> YData = reader.parse1DCsvFile("Data/pdfDataset/YDataPdf.csv");
+	vector<vector<float>> XData = reader.parse2DCsvFile("Data/pdfDataset/XDataPdf.csv");
+	vector<float> YData = reader.parse1DCsvFile("Data/pdfDataset/YDataPdf.csv");
 
-	// vector<vector<double>> XData = reader.parse2DCsvFile("Data/salary/Data_X.csv");
-	// vector<double> YData = reader.parse1DCsvFile("Data/salary/Data_Y.csv");
+	// vector<vector<float>> XData = reader.parse2DCsvFile("Data/salary/Data_X.csv");
+	// vector<float> YData = reader.parse1DCsvFile("Data/salary/Data_Y.csv");
 
-	// vector<vector<double>> XData = reader.parse2DCsvFile("Data/ccle/XData2.csv");
-	// vector<double> YData = reader.parse1DCsvFile("Data/ccle/Y2.csv");
+	// vector<vector<float>> XData = reader.parse2DCsvFile("Data/ccle/XData2.csv");
+	// vector<float> YData = reader.parse1DCsvFile("Data/ccle/Y2.csv");
 
 	//                     C  tol  K L.O
 	Svr* maquina = new Svr(10, 0.01, 1, 1, XData, YData); //100 

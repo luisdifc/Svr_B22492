@@ -25,6 +25,8 @@ public:
     Controlador();
     virtual ~Controlador();
     int run(int argc, char** argv); //corre el juego
+
+    void vectorModule (vector<float> vector);
 };
 
 #endif // CONTROLADOR_H

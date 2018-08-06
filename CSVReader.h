@@ -20,8 +20,8 @@ public:
     CSVReader();
     virtual ~CSVReader();
 
-    vector<double> parse1DCsvFile(string inputFileName);
-    vector<vector<double>> parse2DCsvFile(string inputFileName);
+    vector<float> parse1DCsvFile(string inputFileName);
+    vector<vector<float>> parse2DCsvFile(string inputFileName);
 };
 
 #endif // CSVREADER_H

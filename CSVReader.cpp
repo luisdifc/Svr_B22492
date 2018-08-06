@@ -26,14 +26,14 @@ CSVReader::~CSVReader()
 }
  
 
-/*! \brief Metodo que lee un archivo *.csv y lo pasa a una tabla como un vector de vectores de datos tipo double. El archivo de entrada tiene mas de una columna.
+/*! \brief Metodo que lee un archivo *.csv y lo pasa a una tabla como un vector de vectores de datos tipo float. El archivo de entrada tiene mas de una columna.
  *
  *  \param inputFileName camino completo al archivo que se quiere leer.
  *  \return result Vector de vectores que contiene los datos contenidos en el archivo de entrada.
  */
-vector<vector<double>> CSVReader::parse2DCsvFile(string inputFileName) 
+vector<vector<float>> CSVReader::parse2DCsvFile(string inputFileName) 
 {
-    vector<vector<double> > result;
+    vector<vector<float> > result;
     ifstream inputFile(inputFileName);
     int index = 0;
  
@@ -46,7 +46,7 @@ vector<vector<double>> CSVReader::parse2DCsvFile(string inputFileName)
         if (s[0] != '#') 
         {
             istringstream ss(s);
-            vector<double> record;
+            vector<float> record;
  
             while (ss) 
             {
@@ -80,14 +80,14 @@ vector<vector<double>> CSVReader::parse2DCsvFile(string inputFileName)
 }
  
 
-/*! \brief Metodo que lee un archivo *.csv y lo pasa a una tabla como un vector de datos tipo double. El archivo de entrada tiene una sola columna.
+/*! \brief Metodo que lee un archivo *.csv y lo pasa a una tabla como un vector de datos tipo float. El archivo de entrada tiene una sola columna.
  *
  *  \param inputFileName camino completo al archivo que se quiere leer.
  *  \return result Vector que contiene los datos contenidos en el archivo de entrada.
  */
-vector<double> CSVReader::parse1DCsvFile(string inputFileName) 
+vector<float> CSVReader::parse1DCsvFile(string inputFileName) 
 { 
-    vector<double> result;
+    vector<float> result;
     ifstream inputFile(inputFileName);
     int index = 0;
  
@@ -100,7 +100,7 @@ vector<double> CSVReader::parse1DCsvFile(string inputFileName)
         if (s[0] != '#') 
         {
             istringstream ss(s);
-            vector<double> record;
+            vector<float> record;
  
             while (ss) 
             {
