@@ -1,6 +1,6 @@
 
 Construyendo un SVR..!
 
-w: {-nan,-nan}
-b: -nan
+w: {1.98308e+09,1.29188e+09}
+b: 6.79261e+13
 

@@ -1,0 +1,6 @@
+
+Construyendo un SVR..!
+
+w: {-3.79047e+10}
+b: 1.3914e+11
+
