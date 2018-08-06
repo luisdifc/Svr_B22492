@@ -24,7 +24,7 @@ public:
 public:
     Controlador();
     virtual ~Controlador();
-    int run(); //corre el juego
+    int run(int argc, char** argv); //corre el juego
 };
 
 #endif // CONTROLADOR_H

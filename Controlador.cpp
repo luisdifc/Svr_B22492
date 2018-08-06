@@ -25,7 +25,7 @@ Controlador::~Controlador() {
 
 /*! \brief Metodo que instancia un lector de archivos y una SVR para hacer el entrenamiento y la prediccion.
 */
-int Controlador::run() {
+int Controlador::run(int argc, char** argv) {
 
 	CSVReader reader;
 
@@ -36,132 +36,33 @@ int Controlador::run() {
 	//--------------------------------------------------------------------------------
 	//                            CCLE Tests
 	//--------------------------------------------------------------------------------
-	//--------------------------------------------------------------------------------	
+	//-------------------------------------------	-------------------------------------	
 
-	for (int switchSelector = 1; switchSelector <= 4; switchSelector++) 
-	{
-		switch(switchSelector) 
-		{
-			case 1: {
-			    filestr.open ("csvs/1/Out.txt");
-			    backup = std::cout.rdbuf();
-			    psbuf = filestr.rdbuf();
-			    std::cout.rdbuf(psbuf);
+	string path = "csvs/";
+	path += argv[1];
 
-				vector<vector<float>> XData = reader.parse2DCsvFile("csvs/1/XData.csv");
-				vector<vector<float>> XDataR = reader.parse2DCsvFile("csvs/1/XDataR.csv"); 
-				vector<float> YData = reader.parse1DCsvFile("csvs/1/YData.csv");
+	// cout << path << endl;
 
-				Svr* maquina1 = new Svr(10, 0.01, 1, 1, XData, YData);
-				maquina1->MainRoutine();
-				maquina1->ComputeW(maquina1->alphas, maquina1->X, maquina1->Y);
-				cout << "w: ";
-				maquina1->PrintVector(maquina1->w);
-				cout << "b: " << maquina1->b << endl;
-				cout << endl;
+    filestr.open ( path+"/Out1.txt" );
+    backup = std::cout.rdbuf();
+    psbuf = filestr.rdbuf();
+    std::cout.rdbuf(psbuf);
 
-			    std::cout.rdbuf(backup);
-			    filestr.close();
-			    delete maquina1;
-				break;	
-			}
+	vector<vector<double>> XData = reader.parse2DCsvFile(path+"/XData.csv");
+	vector<vector<double>> XDataR = reader.parse2DCsvFile(path+"/XDataR.csv");
+	vector<double> YData = reader.parse1DCsvFile(path+"/YData.csv");
 
-			case 2: {
-			    filestr.open ("csvs/14/Out.txt");
-			    backup = std::cout.rdbuf();
-			    psbuf = filestr.rdbuf();
-			    std::cout.rdbuf(psbuf);
+	Svr* maquina1 = new Svr(10, 0.01, 1, 1, XData, YData);
+	maquina1->MainRoutine();
+	maquina1->ComputeW(maquina1->alphas, maquina1->X, maquina1->Y);
+	cout << "w: ";
+	maquina1->PrintVector(maquina1->w);
+	cout << "b: " << maquina1->b << endl;
+	cout << endl;
 
-				vector<vector<float>> XData = reader.parse2DCsvFile("csvs/14/XData.csv");
-				vector<vector<float>> XDataR = reader.parse2DCsvFile("csvs/14/XDataR.csv"); 
-				vector<float> YData = reader.parse1DCsvFile("csvs/14/YData.csv");
-
-				Svr* maquina14 = new Svr(10, 0.01, 1, 1, XData, YData);
-				maquina14->MainRoutine();
-				maquina14->ComputeW(maquina14->alphas, maquina14->X, maquina14->Y);
-				cout << "w: ";
-				maquina14->PrintVector(maquina14->w);
-				cout << "b: " << maquina14->b << endl;
-				cout << endl;
-
-			    std::cout.rdbuf(backup);
-			    filestr.close();
-			    delete maquina14;
-				break;	
-			}
-
-			case 3: {
-			    filestr.open ("csvs/15/Out.txt");
-			    backup = std::cout.rdbuf();
-			    psbuf = filestr.rdbuf();
-			    std::cout.rdbuf(psbuf);
-
-				vector<vector<float>> XData = reader.parse2DCsvFile("csvs/15/XData.csv");
-				vector<vector<float>> XDataR = reader.parse2DCsvFile("csvs/15/XDataR.csv"); 
-				vector<float> YData = reader.parse1DCsvFile("csvs/15/YData.csv");
-
-				Svr* maquina15 = new Svr(10, 0.01, 1, 1, XData, YData);
-				maquina15->MainRoutine();
-				maquina15->ComputeW(maquina15->alphas, maquina15->X, maquina15->Y);
-				cout << "w: ";
-				maquina15->PrintVector(maquina15->w);
-				cout << "b: " << maquina15->b << endl;
-				cout << endl;
-
-			    std::cout.rdbuf(backup);
-			    filestr.close();
-			    delete maquina15;
-				break;	
-			}
-
-			case 4: {
-			    filestr.open ("csvs/28/Out.txt");
-			    backup = std::cout.rdbuf();
-			    psbuf = filestr.rdbuf();
-			    std::cout.rdbuf(psbuf);
-
-				vector<vector<float>> XData = reader.parse2DCsvFile("csvs/28/XData.csv");
-				vector<vector<float>> XDataR = reader.parse2DCsvFile("csvs/28/XDataR.csv"); 
-				vector<float> YData = reader.parse1DCsvFile("csvs/28/YData.csv");
-
-				Svr* maquina28 = new Svr(10, 0.01, 1, 1, XData, YData);
-				maquina28->MainRoutine();
-				maquina28->ComputeW(maquina28->alphas, maquina28->X, maquina28->Y);
-				cout << "w: ";
-				maquina28->PrintVector(maquina28->w);
-				cout << "b: " << maquina28->b << endl;
-				cout << endl;
-
-			    std::cout.rdbuf(backup);
-			    filestr.close();
-			    delete maquina28;
-				break;	
-			}	
-
-			default: {
-			    filestr.open ("Out.txt");
-			    backup = std::cout.rdbuf();
-			    psbuf = filestr.rdbuf();
-			    std::cout.rdbuf(psbuf);
-
-				vector<vector<float>> XData = reader.parse2DCsvFile("Data/pdfDataset/XDataPdf.csv");
-				vector<float> YData = reader.parse1DCsvFile("Data/pdfDataset/YDataPdf.csv");
-
-				Svr* maquina = new Svr(10, 0.01, 1, 1, XData, YData);
-				maquina->MainRoutine();
-				maquina->ComputeW(maquina->alphas, maquina->X, maquina->Y);
-				cout << "w: ";
-				maquina->PrintVector(maquina->w);
-				cout << "b: " << maquina->b << endl;
-				cout << endl;
-
-			    std::cout.rdbuf(backup);
-			    filestr.close();
-			    delete maquina;
-				break;
-			}								
-		}
-	}
+    std::cout.rdbuf(backup);
+    filestr.close();
+    delete maquina1;
 
 	cout << "SVR finished running" << endl;
 
@@ -177,17 +78,17 @@ int Controlador::run() {
 	//--------------------------------------------------------------------------------
 	//--------------------------------------------------------------------------------	
 
-/*	// vector<vector<float>> XData = reader.parse2DCsvFile("Data/flowers/XData.csv");
-	// vector<float> YData = reader.parse1DCsvFile("Data/flowers/YData.csv");
+/*	// vector<vector<double>> XData = reader.parse2DCsvFile("Data/flowers/XData.csv");
+	// vector<double> YData = reader.parse1DCsvFile("Data/flowers/YData.csv");
 
-	vector<vector<float>> XData = reader.parse2DCsvFile("Data/pdfDataset/XDataPdf.csv");
-	vector<float> YData = reader.parse1DCsvFile("Data/pdfDataset/YDataPdf.csv");
+	vector<vector<double>> XData = reader.parse2DCsvFile("Data/pdfDataset/XDataPdf.csv");
+	vector<double> YData = reader.parse1DCsvFile("Data/pdfDataset/YDataPdf.csv");
 
-	// vector<vector<float>> XData = reader.parse2DCsvFile("Data/salary/Data_X.csv");
-	// vector<float> YData = reader.parse1DCsvFile("Data/salary/Data_Y.csv");
+	// vector<vector<double>> XData = reader.parse2DCsvFile("Data/salary/Data_X.csv");
+	// vector<double> YData = reader.parse1DCsvFile("Data/salary/Data_Y.csv");
 
-	// vector<vector<float>> XData = reader.parse2DCsvFile("Data/ccle/XData2.csv");
-	// vector<float> YData = reader.parse1DCsvFile("Data/ccle/Y2.csv");
+	// vector<vector<double>> XData = reader.parse2DCsvFile("Data/ccle/XData2.csv");
+	// vector<double> YData = reader.parse1DCsvFile("Data/ccle/Y2.csv");
 
 	//                     C  tol  K L.O
 	Svr* maquina = new Svr(10, 0.01, 1, 1, XData, YData); //100 

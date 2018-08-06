@@ -10,6 +10,13 @@
 
 #include "Svr.h"
 
+float Svr::myRound(float var)
+{
+    float value = (int)(var * 1000 + .5);
+    return (float)value / 1000;
+}
+
+
 /*! \brief Constructor para crear un Lobo con datos especificos.
  *
  *  \param C Parametro que le da a la maquina control de como maneja errores.
@@ -19,7 +26,7 @@
  *  \param Xdata Vector de vectores de datos de entrenamiento de entrada.
  *  \param YData Vector de datos obejtivo de entramiento.
  */
-Svr::Svr(float C, float tol, int kernelType, int useLinearOptim, vector<vector<float>> XData, vector<float> YData) 
+Svr::Svr(double C, double tol, int kernelType, int useLinearOptim, vector<vector<double>> XData, vector<double> YData) 
 {
     cout << "\nConstruyendo un SVR..!\n" << endl;
 
@@ -56,11 +63,11 @@ Svr::~Svr()
  *  \param i Posicion del vector X[i] del cual se va a calcular la salida del SVM.
  *  \return Si el valor de retorno es -1 hubo un error.
  */
-float Svr::Output(int i) 
+double Svr::Output(int i) 
 {
 	// cout << "Output" << endl;
 	int error = -1;
-	float sum = 0;
+	double sum = 0;
 
 	if (this->useLinearOptim == 1) 
 	{
@@ -91,35 +98,35 @@ float Svr::Output(int i)
  *  \param x2 Vector correspondiente al indice i1 en la matriz de datos de entrenamiento X.
  *  \return 1 si calculo el paso con exito.
  */
-int Svr::TakeStep(int i1, int i2, float a2, float y2, float E2, vector<float> x2) 
+int Svr::TakeStep(int i1, int i2, double a2, double y2, double E2, vector<double> x2) 
 {
 	// cout << "TakeStep" << endl;
 
 	//inicializacion de las variables a utilizar con un valor de 0
-	float a1 = 0.0;
-	float y1 = 0.0;  
-	vector<float> x1;
-	float E1 = 0.0;
+	double a1 = 0.0;
+	double y1 = 0.0;  
+	vector<double> x1;
+	double E1 = 0.0;
 
-	float s = 0.0;
-	float L = 0.0;
-	float H = 0.0;
-	float k11 = 0.0;
-	float k12 = 0.0;
-	float k22 = 0.0;
-	float eta = 0.0;
-	float a1New = 0.0;
-	float a2New = 0.0;
-	float f1 = 0.0;
-	float f2 = 0.0;
-	float L1 = 0.0;
-	float H1 = 0.0;
-	float Lobj = 0.0;
-	float Hobj = 0.0;
-	float newB = 0.0;
-	float deltaB = 0.0;
-	float delta1 = 0.0;
-	float delta2 = 0.0;
+	double s = 0.0;
+	double L = 0.0;
+	double H = 0.0;
+	double k11 = 0.0;
+	double k12 = 0.0;
+	double k22 = 0.0;
+	double eta = 0.0;
+	double a1New = 0.0;
+	double a2New = 0.0;
+	double f1 = 0.0;
+	double f2 = 0.0;
+	double L1 = 0.0;
+	double H1 = 0.0;
+	double Lobj = 0.0;
+	double Hobj = 0.0;
+	double newB = 0.0;
+	double deltaB = 0.0;
+	double delta1 = 0.0;
+	double delta2 = 0.0;
 
 	if (i1 == i2) 
 	{
@@ -242,8 +249,8 @@ int Svr::TakeStep(int i1, int i2, float a2, float y2, float E2, vector<float> x2
 	this->errors[i1] = 0;
 	this->errors[i2] = 0;
 
-	this->alphas[i1] = a1New;
-	this->alphas[i2] = a2New;
+	this->alphas[i1] = myRound(a1New);
+	this->alphas[i2] = myRound(a2New);
 
 	return 1;
 }
@@ -254,7 +261,7 @@ int Svr::TakeStep(int i1, int i2, float a2, float y2, float E2, vector<float> x2
  *  \param i1 Posicion en el vector de alfas del cual se va a calcular el error
  *  \return Valor del error.
  */
-float Svr::GetError(int i1) 
+double Svr::GetError(int i1) 
 {
 	// cout << "GetError" << endl;
 	int error = -1;
@@ -268,7 +275,7 @@ float Svr::GetError(int i1)
 		return this->Output(i1) - this->Y[i1];
 	}
 
-	return (float)error;
+	return (double)error;
 }
 
 
@@ -278,7 +285,7 @@ float Svr::GetError(int i1)
  *  \param v2 Segundo vector de entrada.
  *  \return resultado del truco del kernel.
  */
-float Svr::Kernel(vector<float> v1, vector<float> v2) 
+double Svr::Kernel(vector<double> v1, vector<double> v2) 
 {
 	// cout << "Kernel" << endl;
 	int error = -1;
@@ -307,12 +314,12 @@ float Svr::Kernel(vector<float> v1, vector<float> v2)
  *  \param E2 Error del indice i2.
  *  \return Valor calculado del b.
  */
-float Svr::ComputeB (float E1, float a1, float a1New, float a2New, float k11, float k12, float k22, float y1, float y2, float a2, float E2) 
+double Svr::ComputeB (double E1, double a1, double a1New, double a2New, double k11, double k12, double k22, double y1, double y2, double a2, double E2) 
 {
 	// cout << "ComputeB" << endl;
-	float b1 = 0.0;
-	float b2 = 0.0;
-	float newB = 0.0;
+	double b1 = 0.0;
+	double b2 = 0.0;
+	double newB = 0.0;
 
 	//Ecuacion 20
 	b1 = E1 + y1 * (a1New - a1) * k11 + y2 * (a2New - a2) * k12 + this->b;
@@ -346,16 +353,16 @@ float Svr::ComputeB (float E1, float a1, float a1New, float a2New, float k11, fl
  *  \param X Vector de vectores de los datos de entrada.
  *  \param y Vector de valores objetivo.
  */
-void Svr::ComputeW(vector<float> multipliers, vector< vector<float> > X, vector<float> y) 
+void Svr::ComputeW(vector<double> multipliers, vector< vector<double> > X, vector<double> y) 
 {
 	// cout << "ComputeW" << endl;
-	vector<float> w;
-	vector<float> vecByScal;
+	vector<double> w;
+	vector<double> vecByScal;
 	this->FillWithCeros(y.size(), w);
 
-	float sum = 0.0;
-	float sum1 = 0.0;
-	float sum2 = 0.0;
+	double sum = 0.0;
+	double sum1 = 0.0;
+	double sum2 = 0.0;
 
 	for (int index1 = 0; index1 < y.size(); index1++) 
 	{
@@ -376,10 +383,10 @@ void Svr::ComputeW(vector<float> multipliers, vector< vector<float> > X, vector<
  *  \param scalar Scalar que va a multiplicar el vector. 
  *  \return Result vector. 
  */
-vector<float> Svr::VectorByScalar (vector<float> v1, float scalar) 
+vector<double> Svr::VectorByScalar (vector<double> v1, double scalar) 
 {
 	// cout << "VectorByScalar" << endl;
-	vector<float> result;
+	vector<double> result;
 
 	for (int index = 0; index < v1.size(); index++) 
 	{
@@ -394,7 +401,7 @@ vector<float> Svr::VectorByScalar (vector<float> v1, float scalar)
  *
  *  \return Resultado de la primera heuristica.
  */
-float Svr::FirstHeuristic() 
+double Svr::FirstHeuristic() 
 {
 	// cout << "FirstHeuristic" << endl;
 	int numChanged = 0;
@@ -413,13 +420,13 @@ float Svr::FirstHeuristic()
  *
  *  \return Resultado de la segunda heuristica.
  */
-float Svr::SecondHeuristic(vector<int> nonBoundIndices, float E2) 
+double Svr::SecondHeuristic(vector<int> nonBoundIndices, double E2) 
 {
 	// cout << "SecondHeuristic" << endl;
-	float i1 = -1;
-	float E1 = 0.0;
-	float step = 0.0;
-	float max = 0.0;
+	double i1 = -1;
+	double E1 = 0.0;
+	double step = 0.0;
+	double max = 0.0;
 
 	if (nonBoundIndices.size() > 1) 
 	{
@@ -472,12 +479,12 @@ vector<int> Svr::GetNonBoundIndexes()
 int Svr::ExamineExample (int i2) 
 {
 	// cout << "ExamineExample" << endl;
-	float y2 = this->Y[i2];
-	float a2 = this->alphas[i2];
-	vector<float> x2 = this->X[i2]; 
-	float E2 = this->GetError(i2);
+	double y2 = this->Y[i2];
+	double a2 = this->alphas[i2];
+	vector<double> x2 = this->X[i2]; 
+	double E2 = this->GetError(i2);
 
-	float r2 = 0.0;
+	double r2 = 0.0;
 	vector<int> nonBoundIndexes;
 	int i1 = 0;
 	int rand = 0;
@@ -548,7 +555,7 @@ int Svr::ExamineExample (int i2)
 void Svr::MainRoutine() 
 {
 	// cout << "MainRoutine" << endl;
-	float numChanged = 0.0;
+	double numChanged = 0.0;
 	int examineAll = 1;
 
 	while (numChanged > 0 || examineAll) 
@@ -587,10 +594,10 @@ void Svr::MainRoutine()
  *  \param newX Nuevos datos a los cuales se les requiere correrle el SVM para realizar una clasificacion.
  *  \return Valor de la clasificacion.
  */
-float Svr::Predict(vector<float> newX) 
+double Svr::Predict(vector<double> newX) 
 {
 	// cout << "Predict" << endl;
-	float newY = 0.0;
+	double newY = 0.0;
 	newY = DotProduct(newX, this->w);
 
 	return newY - this->b;
@@ -602,9 +609,9 @@ float Svr::Predict(vector<float> newX)
  *  \param newX Nuevos datos a los cuales se les requiere correrle el SVR para realizar prediccion del nuevo valor y.
  *  \return Valor de la regresion.
  */
-float Svr::PredictRegression(vector<float> newX) 
+double Svr::PredictRegression(vector<double> newX) 
 {	
-	float result;
+	double result;
 
 	for (int index = 0; index < this->X.size(); index++) 
 	{
@@ -623,10 +630,10 @@ float Svr::PredictRegression(vector<float> newX)
  *  \param v2 Segundo vector.
  *  \return Valor del producto punto.
  */
-float Svr::DotProduct (std::vector<float> v1, std::vector<float> v2) 
+double Svr::DotProduct (std::vector<double> v1, std::vector<double> v2) 
 {
 	// cout << "DotProduct" << endl;
-	float result = 0;
+	double result = 0;
 
 	for (int index = 0; index < v1.size(); index++) 
 	{
@@ -643,10 +650,10 @@ float Svr::DotProduct (std::vector<float> v1, std::vector<float> v2)
  *  \param v2 Segundo vector.
  *  \return Vector que contiene el valor del la suma de los vectores.
  */
-vector<float> Svr::VectorSum(vector<float> v1, vector<float> v2) 
+vector<double> Svr::VectorSum(vector<double> v1, vector<double> v2) 
 {
 	// cout << "VectorSum" << endl;
-	vector<float> result;
+	vector<double> result;
 
 	for (int index = 0; index < v1.size(); index++) 
 	{
@@ -663,7 +670,7 @@ vector<float> Svr::VectorSum(vector<float> v1, vector<float> v2)
  *  \param &vector Referencia del vector que se quiere llenar con ceros.
  *  \return India que se termino de correr con exito
  */
-int Svr::FillWithCeros(int size, vector<float> &vector) 
+int Svr::FillWithCeros(int size, vector<double> &vector) 
 {
 	// cout << "FillWithCeros" << endl;
 	for (int index = 0; index < size; index++) 
@@ -675,13 +682,13 @@ int Svr::FillWithCeros(int size, vector<float> &vector)
 }
 
 
-/*! \brief Metodo que devuelve el mayor entre 2 valores tipo float.
+/*! \brief Metodo que devuelve el mayor entre 2 valores tipo double.
  *
  *  \param n1 Primer valor.
  *  \param n2 Segundo valor.
  *  \return El valor mayor.
  */
-float Svr::GetMax(float n1, float n2) 
+double Svr::GetMax(double n1, double n2) 
 {
 	// cout << "GetMax" << endl;
 	int error = -1;
@@ -699,13 +706,13 @@ float Svr::GetMax(float n1, float n2)
 }
 
 
-/*! \brief Metodo que devuelve el menor entre 2 valores tipo float.
+/*! \brief Metodo que devuelve el menor entre 2 valores tipo double.
  *
  *  \param n1 Primer valor.
  *  \param n2 Segundo valor.
  *  \return El valor menor.
  */
-float Svr::GetMin(float n1, float n2) 
+double Svr::GetMin(double n1, double n2) 
 {
 	// cout << "GetMin" << endl;
 	int error = -1;
@@ -745,7 +752,7 @@ int Svr::RandNumGenerator(int n1, int n2)
  *
  *  \param vector Vector que se quiere imprimir en pantlla.
  */
-void Svr::PrintVector(vector<float> vector) 
+void Svr::PrintVector(vector<double> vector) 
 {
 	// cout << "PrintVector" << endl;
 	cout << "{";
@@ -765,7 +772,7 @@ void Svr::PrintVector(vector<float> vector)
  *
  *  \param vector Vector que se quiere imprimir en pantlla.
  */
-void Svr::PrintMatrix(vector< vector<float> > array) 
+void Svr::PrintMatrix(vector< vector<double> > array) 
 {
 	// cout << "PrintMatrix" << endl;
 	cout << "size: " << array.size() << "," << array[0].size() << endl;
@@ -794,7 +801,7 @@ void Svr::PrintMatrix(vector< vector<float> > array)
  *  \param j Numero de filas.
  *  \param &array Referencia del vector de vectores al que se le quiere hacer el cambio de tamanno.
  */
-void Svr::GiveSizeToMatrix(int i, int j, vector< vector<float> > &array) 
+void Svr::GiveSizeToMatrix(int i, int j, vector< vector<double> > &array) 
 {
 	// cout << "GiveSizeToMatrix" << endl;
 	array.resize(i);

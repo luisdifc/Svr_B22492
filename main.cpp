@@ -9,5 +9,5 @@ int main(int argc, char *argv[]) {
     Controlador controlador;
     
     //se llama a la funcion run del controlador 
-    return controlador.run();
+    return controlador.run(argc, argv);
 }
